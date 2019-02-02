@@ -1,0 +1,28 @@
+    temp_path=/GWD/appbase/projects/RD-TSci-PhewasUKBB/PheWAS/phenotype500k_new
+    BI_pheno_name=phenotypes_BI.txt
+
+    numTraits=$(awk -F ' ' '{print NF; exit}' $temp_path/$BI_pheno_name)
+    numSub=$(($numTraits/40))    
+    endNum=$(($numSub*40))
+
+    k=1
+    tmpStart=3
+    tmpEnd=$numSub
+
+        cat $temp_path/$BI_pheno_name | awk -v start=$tmpStart -v end=$tmpEnd '{printf $1 " " $2 " "; for(i=start; i<=end; i++) {printf $i " "} printf "\n"}' > $temp_path/Sub_BI_pheno_${k}.txt
+
+
+    for(( k=2; k<=40; k++ ))
+      do
+        tmpStart=$((1+(${k}-1)*$numSub))
+        tmpEnd=$(($numSub+(${k}-1)*$numSub))
+
+        cat $temp_path/$BI_pheno_name | awk -v start=$tmpStart -v end=$tmpEnd '{printf $1 " " $2 " "; for(i=start; i<=end; i++) {printf $i " "} printf "\n"}' > $temp_path/Sub_BI_pheno_${k}.txt
+     done
+    
+        k=41
+        tmpStart=$(($endNum+1))
+        tmpEnd=$numTraits
+        cat $temp_path/$BI_pheno_name | awk -v start=$tmpStart -v end=$tmpEnd '{printf $1 " " $2 " "; for(i=start; i<=end; i++) {printf $i " "} printf "\n"}' > $temp_path/Sub_BI_pheno_${k}.txt
+
+
